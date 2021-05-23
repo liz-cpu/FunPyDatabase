@@ -4,6 +4,8 @@ from FunDatabaseStuff.table import Table
 
 
 class Database(object):
+    """
+    """
 
     def __init__(self, path: str, *tables: Table) -> None:
         self.__path = path

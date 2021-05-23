@@ -7,19 +7,10 @@ from FunDatabaseStuff.exceptions import (
 )
 
 
-def create_query(x: list, sep: str) -> str:
-    L = []
-    for col, value in x:
-        if isinstance(value, str):
-            value = f'\"{value}\"'
-        L += [f'{col} = {value}']
-    if len(L) > 1:
-        return f" {sep} ".join(L)
-    else:
-        return str(L[0])
-
-
 class TableModel(object):
+    """
+    """
+
     def __init__(self, name: str, model: str) -> None:
         self.name = name
         self.model = self.check_model(model)
@@ -42,6 +33,8 @@ class TableModel(object):
 
 
 class Table(object):
+    """
+    """
 
     def __init__(self, name: str, model: TableModel = None, *cols: str) -> None:
         self.name = name
@@ -52,31 +45,45 @@ class Table(object):
     def __str__(self) -> str:
         return self.name
 
+    @staticmethod
+    def create_query(x: list, sep: str) -> str:
+        L = []
+        for col, value in x:
+            if isinstance(value, str):
+                value = f'\"{value}\"'
+            L += [f'{col} = {value}']
+        if len(L) > 1:
+            return f" {sep} ".join(L)
+        else:
+            return str(L[0])
+
     def create(self, db: Cursor) -> None:
         if self.__model:
-            print(self.__model)
             db.execute(str(self.__model))
         else:
             raise ModelNonExistentError('No model registered for this table')
 
     def select(self, db: Cursor, *cols: str, **where) -> list:
+
         name = self.name
         if not where and not cols:
             db.execute(f'SELECT * FROM {name}')
+
         elif cols and not where:
             db.execute(f'SELECT {", ".join(cols)} FROM {name}')
+
         elif where and not cols:
-            whstl = [[column, value] for column, value in where.items()]
-            where_str = create_query(whstl, 'AND')
+            where_list = [[column, value] for column, value in where.items()]
+            where_str = self.create_query(where_list, 'AND')
             db.execute(f'SELECT * FROM {name} WHERE {where_str}')
+
         else:
-            whstl = [[column, value] for column, value in where.items()]
-            where_str = create_query(whstl, 'AND')
+            where_list = [[column, value] for column, value in where.items()]
+            where_str = self.create_query(where_list, 'AND')
             db.execute(
                 f'SELECT {", ".join(cols)} FROM {name} WHERE {where_str}')
 
-        rows = [row for row in db]
-        return rows
+        return [row for row in db]
 
     def insert(self, db: Cursor, *values) -> None:
         if len(values) != len(self.columns):
@@ -111,6 +118,6 @@ class Table(object):
         if not replace_list:
             raise TypeError("Update should at least have 1 column to update.")
         else:
-            updates = create_query(replace_list, ',')
-            search_query = create_query(search_list, 'AND')
+            updates = self.create_query(replace_list, ',')
+            search_query = self.create_query(search_list, 'AND')
             db.execute(f'UPDATE {name} SET {updates} WHERE {search_query}')
