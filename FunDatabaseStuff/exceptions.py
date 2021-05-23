@@ -8,3 +8,11 @@ class NonExistentColumnError(Exception):
 
 class ColumnError(Exception):
     pass
+
+
+class InvalidCreateError(Exception):
+    pass
+
+
+class ModelNonExistentError(Exception):
+    pass

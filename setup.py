@@ -2,8 +2,8 @@ from setuptools import setup
 
 setup(
    name='FunDatabaseStuff',
-   version='1.0',
-   description='A unhelpful module',
+   version='0.1',
+   description='A basic SQLite3 module',
    author='emsquellen',
    packages=['FunDatabaseStuff']
 )
