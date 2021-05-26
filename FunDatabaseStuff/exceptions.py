@@ -2,7 +2,7 @@ class NonExistentTableError(Exception):
     pass
 
 
-class NonExistentColumnError(Exception):
+class CreateNonExistent(Exception):
     pass
 
 
@@ -10,9 +10,5 @@ class ColumnError(Exception):
     pass
 
 
-class InvalidCreateError(Exception):
-    pass
-
-
-class ModelNonExistentError(Exception):
+class InvalidCreate(Exception):
     pass

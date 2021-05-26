@@ -1,2 +1,2 @@
 from .database import Database
-from .table import Table, TableModel
+from .table import Table, TableCreate
