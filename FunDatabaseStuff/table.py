@@ -63,12 +63,12 @@ class Table(object):
     :type cols: str
     """
 
-    def __init__(self, name: str, create: TableCreate = None, *cols: str) -> None:
+    def __init__(self, name: str, *cols: str, create: TableCreate = None) -> None:
         """Constructor method
         """
         self.name = name
         self.columns = list(cols)
-        self.__create = create
+        self.create = create
         self.has_create = True if create else False
 
     def __repr__(self) -> str:
@@ -82,8 +82,8 @@ class Table(object):
         cols = ", ".join(self.columns)
         return f'Table {self.name} with columns {cols}.'
 
-    def _add_create(self, create: TableCreate) -> None:
-        self.__create = create
+    def add_create(self, create: TableCreate) -> None:
+        self.create = create
 
     def create(self, db: Cursor) -> None:
         """Creates a table (if not exists) in the SQLite3 Database

@@ -16,9 +16,9 @@ class Database(object):
     def __init__(self, path: str, *tables: Table) -> None:
         """Constructor method
         """
-        self.__path = path
+        self._path = path
         self.tables = tables
-        self.cursor, self.__conn = self.connect()
+        self.cursor, self._conn = self.connect()
         for t in tables:
             self.test_table_existence(t)
         self.tables_names = [x.name for x in self.tables]
@@ -30,7 +30,7 @@ class Database(object):
         :return: The cursor and the connection
         :rtype: tuple
         """
-        db = sqlite3.connect(self.__path)
+        db = sqlite3.connect(self._path)
         return (db.cursor(), db)
 
     def add(self, *tables: Table) -> None:
@@ -43,7 +43,7 @@ class Database(object):
     def commit(self) -> None:
         """Commits to the database
         """
-        self.__conn.commit()
+        self._conn.commit()
 
     def remove(self, *tables: Table) -> None:
         """Removes a table from the database
